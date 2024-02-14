@@ -1,17 +1,3 @@
-#Multifamily-Census-Tract-File
-#https://www.fhfa.gov/DataTools/Downloads/Documents/Enterprise-PUDB/Multi-Family_Census_Tract_File_/2022_MFCensusTract2022.zip
-#Multifamily-National-File
-#https://www.fhfa.gov/DataTools/Downloads/Documents/Enterprise-PUDB/Multi-Family_National_File_/2022_MFNationalFile2022.zip
-#Single-Family-Census-Tract-File-FannieMae
-#https://www.fhfa.gov/DataTools/Downloads/Documents/Enterprise-PUDB/Single-Family_Census_Tract_File_/2022_SFCensusTractFNM2022.zip
-#Single-Family-Census-Tract-File-FreddieMac
-#https://www.fhfa.gov/DataTools/Downloads/Documents/Enterprise-PUDB/Single-Family_Census_Tract_File_/2022_SFCensusTractFRE2022.zip
-#Single-Family-National-File-C
-#https://www.fhfa.gov/DataTools/Downloads/Documents/Enterprise-PUDB/National-File-C/2022_SFNationalFileC2022.zip
-#Single-Family-National-File-B
-#https://www.fhfa.gov/DataTools/Downloads/Documents/Enterprise-PUDB/National-File-B/2022_SFNationalFileB2022.zip
-#Single-Family-National-File-A
-#https://www.fhfa.gov/DataTools/Downloads/Documents/Enterprise-PUDB/National-File-A/2022_SFNationalFileA2022.zip
 from io import BytesIO
 from zipfile import ZipFile
 from urllib.request import urlopen
@@ -66,9 +52,10 @@ def parse_default(fileobj):
 
 def parse_national_a(fileobj):
     # documentation: https://fhfa.gov/DataTools/Downloads/Documents/Enterprise-PUDB/National-File-A/2022_Single_Family_National_File_A.pdf
-    colnames = ["enterprise",
+    colnames = ["enterprise_flag",
                "record_num",
                "msa_code",
+               "tract_pct_minority", # pre-2012: 2000 census data; 2012-2021: 2010 census data; 2022: 2020 census data
                "tract_income_ratio",
                "borrower_income_ratio",
                "ltv",
@@ -82,6 +69,7 @@ def parse_national_a(fileobj):
                "affordability"]
     return pd.read_csv(fileobj, names=colnames, delimiter='\s+')
 
+# example calls below
 singlefamily_a_freddie_2015 = get_data("Singlefamily-National-A-Freddie", 2015)
 singlefamily_a_fannie_latest = get_data("Singlefamily-National-A-Fannie", 2022)
 singlefamily_a_freddie_latest = get_data("Singlefamily-National-A-Freddie", 2022)
