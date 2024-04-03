@@ -15,10 +15,11 @@ print(df.head(3))
 groupby = df[df['state_fips_code'] <= 56].groupby(['county'])
 
 out = pd.DataFrame({
-    'dti_avg': groupby['dti_num'].mean(),
-    'ltv_avg': groupby['ltv'].mean(),
+    'dti_avg': groupby['dti_num'].mean().round(3),
+    'ltv_avg': groupby['ltv'].mean().round(3),
     'income_estimate': groupby['local_median_income'].mean().astype('int'), # not a good estimate
-    'pct_first_time_buyer': groupby['first_time_buyer'].mean().mul(-1).add(2)
+    'pct_nonwhite_estimate': groupby['tract_pct_minority'].mean().round(3), # not a good estimate
+    'pct_first_time_buyer': groupby['first_time_buyer'].mean().mul(-100).add(200).round(3)
 })
 
 print(out.head())
