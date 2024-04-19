@@ -261,7 +261,7 @@ def get_county_averages(raw_df):
     out = pd.DataFrame({
         'dti_avg': groupby['dti_num'].mean().round(3),
         'ltv_avg': groupby['ltv'].mean().round(3),
-        'income_estimate': groupby['local_median_income'].mean().round(0).astype('int'), # not a good estimate
+        'income_estimate': groupby['tract_median_income'].mean().round(0).astype('int'), # not a good estimate
         'pct_nonwhite_estimate': groupby['tract_pct_minority'].mean().round(3), # not a good estimate
         'pct_first_time_buyer': groupby['first_time_buyer'].mean().mul(-100).add(200).round(3)
     })
@@ -282,6 +282,7 @@ yearly_data = {}
 
 for year in years:
     raw_data = pd.concat([get_data(dataset, year) for dataset in datasets])
+    print(f'{year}: {raw_data.shape}')
     cleaned_data = clean_df(raw_data)
     county_averages = get_county_averages(cleaned_data)
     #cols_to_rename = ['dti_avg', 'income_estimate', 'pct_nonwhite_estimate', 'pct_first_time_buyer']
